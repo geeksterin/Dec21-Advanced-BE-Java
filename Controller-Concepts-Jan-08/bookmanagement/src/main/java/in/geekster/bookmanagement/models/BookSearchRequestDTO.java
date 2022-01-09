@@ -1,10 +1,9 @@
 package in.geekster.bookmanagement.models;
 
 import in.geekster.bookmanagement.enums.BookCategory;
-import lombok.*;
+import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * These are DTOs or Data Transfer Objects. Purpose of such classes is to just carry the data
@@ -14,11 +13,11 @@ import java.util.List;
  */
 
 @Data
-public class BookDTO {
-    private Long id;
-    private String name;
-    private BookCategory category;
-    private List<AuthorDTO> authors;
-    private LocalDate publishedOn;
+public class BookSearchRequestDTO {
+
+    private String bookName;
+    private String authorName;
     private String publisher;
+    private LocalDate publishedOn;
+    private BookCategory category;
 }

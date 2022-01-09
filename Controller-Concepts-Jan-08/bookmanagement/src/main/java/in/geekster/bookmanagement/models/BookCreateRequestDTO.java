@@ -1,7 +1,7 @@
 package in.geekster.bookmanagement.models;
 
 import in.geekster.bookmanagement.enums.BookCategory;
-import lombok.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,11 +14,10 @@ import java.util.List;
  */
 
 @Data
-public class BookDTO {
-    private Long id;
+public class BookCreateRequestDTO {
     private String name;
-    private BookCategory category;
-    private List<AuthorDTO> authors;
-    private LocalDate publishedOn;
     private String publisher;
+    private LocalDate publishedOn;
+    private List<Long> authorIds;
+    private BookCategory category;
 }
