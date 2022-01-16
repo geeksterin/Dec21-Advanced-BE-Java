@@ -40,9 +40,15 @@ public class AuthorController {
          * the handling of this particular error is done in some place common
          * {@link in.geekster.bookmanagement.controlleradvisors.GlobalControllerAdvisor}
          */
-        if (!StringUtils.hasText(authToken)) {
-            throw new AuthTokenMissingException("Auth token missing");
-        }
+
+            if (!StringUtils.hasText(authToken)) {
+                throw new AuthTokenMissingException("Auth token missing");
+            }
+
+            if (true) {
+                throw new IllegalArgumentException("sflhjsfkjsf");
+            }
+
         final AuthorDAO authorDAO = authorService.getAuthorByID(id);
         final ApiResponse apiResponse = new ApiResponse();
         apiResponse.setData(authorDAO);

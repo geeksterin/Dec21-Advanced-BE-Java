@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import in.geekster.bookmanagement.daos.AuthorDAO;
 import in.geekster.bookmanagement.daos.BookDAO;
 import in.geekster.bookmanagement.exceptions.AuthorNotFoundException;
+import in.geekster.bookmanagement.exceptions.InvalidParameterException;
 import in.geekster.bookmanagement.models.BookCreateRequestDTO;
 import in.geekster.bookmanagement.services.AuthorService;
 import in.geekster.bookmanagement.services.BookService;
@@ -34,6 +35,10 @@ public class DefaultBookService implements BookService {
 
     @Override
     public BookDAO createNewBook(final BookCreateRequestDTO bookCreateRequestDTO) {
+
+        if (bookCreateRequestDTO.getPublishedOn() <= 0 ) {
+            throw new InvalidParameterException("Published Year cannot be negative");
+        }
 
         final List<Long> authorIds = bookCreateRequestDTO.getAuthorIds();
         log.debug("Looking for author details by author IDs: {}", authorIds);

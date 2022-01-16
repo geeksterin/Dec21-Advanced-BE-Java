@@ -6,6 +6,7 @@ import in.geekster.bookmanagement.daos.BookDAO;
 import in.geekster.bookmanagement.enums.BookCategory;
 import in.geekster.bookmanagement.exceptions.AuthTokenMissingException;
 import in.geekster.bookmanagement.exceptions.AuthorNotFoundException;
+import in.geekster.bookmanagement.exceptions.InvalidParameterException;
 import in.geekster.bookmanagement.models.*;
 import in.geekster.bookmanagement.models.BookCreateRequestDTO;
 import in.geekster.bookmanagement.models.Error;
@@ -58,38 +59,10 @@ public class BookController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /**
-     * Multiple GET urls based on query param
-     */
-    @GetMapping(params = "author")
-    public ResponseEntity<ApiResponse> getAllBooksByCategory(@RequestParam("author") final String name) {
-        log.info("All book request by Author: {}", name);
-        final AuthorDAO authorDAO = authorService.getAuthorByName(name);
-        log.info("Fetched Author: {}", authorDAO);
-        final List<BookDAO> bookDAOList = bookService.getAllBooksByAuthorId(authorDAO.getId());
-        final List<BookDTO> bookDTOList = new ArrayList<>();
-        bookDAOList.forEach((bookDAO -> {
-            final BookDTO bookDTO = objectMapper.convertValue(bookDAO, BookDTO.class);
-            bookDTOList.add(bookDTO);
-        }));
-        final ApiResponse response = new ApiResponse();
-        response.setData(bookDTOList);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-
-    /**
-     * When query parameter gets too long, you treat that as a search request instead of embedding all the params
-     * in the URL. Henceforth, every POST request to the path /books/search will be treated as a new search request resource
-     */
-    @PostMapping("search")
-    public ResponseEntity<ApiResponse> searchBookByParams(@RequestBody final BookSearchRequestDTO searchRequest) {
-        return null;
-    }
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createNewBook(@RequestBody final BookCreateRequestDTO requestDTO, final HttpServletRequest request) throws Exception {
+    public ResponseEntity<ApiResponse> createNewBook(@RequestBody final BookCreateRequestDTO requestDTO, final HttpServletRequest request) {
         log.debug("Received Book Create Request: {}", requestDTO);
         final String authToken = request.getHeader("X-Auth-Token");
 
@@ -105,6 +78,14 @@ public class BookController {
             throw new AuthTokenMissingException("No auth token found");
         }
 
+        final String bookName = requestDTO.getName();
+
+
+        if (!StringUtils.hasText(bookName)) {
+            final ApiResponse apiResponse = new ApiResponse();
+            apiResponse.setData("Book name is null");
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
 
         /**
          * This here is an example of local exception handling. The service layer throws an exception
@@ -119,14 +100,8 @@ public class BookController {
             final ApiResponse apiResponse = new ApiResponse();
             apiResponse.setData(bookDAO);
             return ResponseEntity.ok(apiResponse);
-        } catch (final AuthorNotFoundException e) {
-            log.error("Could not find authors:\n", e);
-            final Error error = new Error();
-            error.setErrorCode("ERR002");
-            error.setErrorMessage(e.getMessage());
-            final ApiResponse apiResponse = new ApiResponse();
-            apiResponse.setError(error);
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        } catch (final InvalidParameterException e) {
+            return ResponseEntity.badRequest().body(null);
         }
     }
 }

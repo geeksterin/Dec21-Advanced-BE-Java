@@ -17,7 +17,7 @@ import java.util.List;
 public class BookCreateRequestDTO {
     private String name;
     private String publisher;
-    private LocalDate publishedOn;
+    private Integer publishedOn;
     private List<Long> authorIds;
     private BookCategory category;
 }

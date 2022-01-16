@@ -1,5 +1,7 @@
 package in.geekster.bookmanagement.controlleradvisors;
 
+import in.geekster.bookmanagement.controllers.AuthorController;
+import in.geekster.bookmanagement.controllers.BookController;
 import in.geekster.bookmanagement.exceptions.AuthTokenMissingException;
 import in.geekster.bookmanagement.models.ApiResponse;
 import in.geekster.bookmanagement.models.Error;
@@ -17,14 +19,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalControllerAdvisor {
 
-    @ExceptionHandler({AuthTokenMissingException.class})
-    public ResponseEntity<ApiResponse> handleAuthTokenMissingException(final AuthTokenMissingException authTokenMissingException) {
-        log.error("Got Auth token missing error:\n", authTokenMissingException);
-        final Error error = new Error();
-        error.setErrorCode("ERR001");
-        error.setErrorMessage(authTokenMissingException.getMessage());
-        final ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setError(error);
-        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-    }
+   @ExceptionHandler(value = {AuthTokenMissingException.class, IllegalArgumentException.class})
+   public ResponseEntity<String> handleNoAuthTokenFoundException(final RuntimeException exception) {
+
+       if (exception instanceof AuthTokenMissingException) {
+
+       }
+       // glsjlsfjlsjf
+       return ResponseEntity.badRequest().body("No Auth Token");
+   }
+
+//    @ExceptionHandler(value = {IllegalArgumentException.class})
+//    public ResponseEntity<String> handleIllegalArgExc(final IllegalArgumentException exception) {
+//        // glsjlsfjlsjf
+//        return ResponseEntity.badRequest().build();
+//    }
 }

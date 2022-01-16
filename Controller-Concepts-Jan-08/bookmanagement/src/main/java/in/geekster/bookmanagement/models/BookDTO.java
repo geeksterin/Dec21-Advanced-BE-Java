@@ -15,9 +15,9 @@ import java.util.List;
 
 @Data
 public class BookDTO {
-    private Long id;
-    private String name;
-    private BookCategory category;
+    private final Long id;
+    private final String name;
+    private final BookCategory category;
     private List<AuthorDTO> authors;
     private LocalDate publishedOn;
     private String publisher;
