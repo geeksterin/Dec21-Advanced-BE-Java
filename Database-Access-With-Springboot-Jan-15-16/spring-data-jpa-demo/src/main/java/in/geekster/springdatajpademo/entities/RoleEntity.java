@@ -1,5 +1,6 @@
 package in.geekster.springdatajpademo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import in.geekster.springdatajpademo.enums.Department;
 import in.geekster.springdatajpademo.enums.Designation;
 import lombok.Data;
@@ -53,6 +54,7 @@ public class RoleEntity extends AbstractEntity {
     private Designation designation;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<EmployeeEntity> employeeEntities;
 
 }

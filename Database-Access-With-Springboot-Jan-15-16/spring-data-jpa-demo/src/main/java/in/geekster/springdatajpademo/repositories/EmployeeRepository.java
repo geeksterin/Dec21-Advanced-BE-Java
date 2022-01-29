@@ -20,5 +20,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long>, JpaSpecificationExecutor<EmployeeEntity> {
+public interface EmployeeRepository extends IDedRepository<EmployeeEntity>, JpaSpecificationExecutor<EmployeeEntity> {
 }

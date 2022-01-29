@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 
 @Repository
-public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
+public interface RoleRepository extends IDedRepository<RoleEntity> {
 
     /**
      * The method below is an example of Derived Query. Spring has certain rules to when it comes to

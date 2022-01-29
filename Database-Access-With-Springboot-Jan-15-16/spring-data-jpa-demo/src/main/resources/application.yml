@@ -5,8 +5,10 @@ spring:
     url: jdbc:mysql://localhost:3306/employee_management
     username: dev
     password: root
-#    driver-class-name: com.mysql.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update  # specifies what mode the application will run in. Other values are create / create-drop / validate
-      show-sql: true # generate SQL statements on the logs
+    show-sql: true # generate SQL statements on the logs
+logging:
+  level:
+    in.geekster.springdatajpademo: DEBUG

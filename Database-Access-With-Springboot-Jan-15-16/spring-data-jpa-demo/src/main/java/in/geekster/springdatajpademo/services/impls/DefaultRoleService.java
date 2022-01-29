@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@Transactional
+@Transactional(readOnly = true)
 public class DefaultRoleService implements RoleService {
 
     /**
@@ -55,6 +55,7 @@ public class DefaultRoleService implements RoleService {
     }
 
     @Override
+    @Transactional
     public RoleDTO createRole(final RoleDTO roleDTO) {
         log.info("Creating Role: {}", roleDTO);
         RoleEntity roleEntity = objectMapper.convertValue(roleDTO, RoleEntity.class);
@@ -94,6 +95,7 @@ public class DefaultRoleService implements RoleService {
     }
 
     @Override
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public List<Designation> getAllDesignationsByDepartment(final Department department) {
         log.info("Getting all Designations by Department: {}", department);
 
